@@ -786,6 +786,13 @@ class SAM2VideoPredictor(SAM2Base):
             pred_masks_gpu = fill_holes_in_mask_scores(
                 pred_masks_gpu, self.fill_hole_area
             )
+            current_out["low_res_multimasks"] = torch.cat(
+                [
+                    fill_holes_in_mask_scores(current_out["low_res_multimasks"][:,i:i+1], self.fill_hole_area) 
+                    for i in range(current_out["low_res_multimasks"].shape[1])
+                ], 
+                dim=1
+            )
         pred_masks = pred_masks_gpu.to(storage_device, non_blocking=True)
         # "maskmem_pos_enc" is the same across frames, so we only need to store one copy of it
         maskmem_pos_enc = self._get_maskmem_pos_enc(inference_state, current_out)
@@ -799,6 +806,8 @@ class SAM2VideoPredictor(SAM2Base):
             "pred_masks": pred_masks,
             "obj_ptr": obj_ptr,
             "object_score_logits": object_score_logits,
+            "low_res_multimasks": current_out["low_res_multimasks"],
+            "ious": current_out["ious"],
         }
         return compact_current_out, pred_masks_gpu
 

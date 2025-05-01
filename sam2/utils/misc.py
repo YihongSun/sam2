@@ -245,7 +245,10 @@ def load_video_frames_from_jpg_images(
         for p in os.listdir(jpg_folder)
         if os.path.splitext(p)[-1] in [".jpg", ".jpeg", ".JPG", ".JPEG"]
     ]
-    frame_names.sort(key=lambda p: int(os.path.splitext(p)[0]))
+
+    def path_to_int(path):
+        return int(os.path.splitext(path)[0].replace("frame", ""))
+    frame_names.sort(key=lambda p: path_to_int(p))
     num_frames = len(frame_names)
     if num_frames == 0:
         raise RuntimeError(f"no images found in {jpg_folder}")
