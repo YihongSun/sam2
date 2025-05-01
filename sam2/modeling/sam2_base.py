@@ -661,7 +661,7 @@ class SAM2Base(torch.nn.Module):
             to_cat_memory_pos_embed = [self.no_mem_pos_enc.expand(1, B, self.mem_dim)]
 
         # Step 2: Concatenate the memories and forward through the transformer encoder
-        memory = torch.cat(to_cat_memory, dim=0)
+        memory = torch.cat(to_cat_memory, dim=0).float()
         memory_pos_embed = torch.cat(to_cat_memory_pos_embed, dim=0)
 
         pix_feat_with_mem = self.memory_attention(
