@@ -247,7 +247,7 @@ def load_video_frames_from_jpg_images(
     ]
 
     def path_to_int(path):
-        return int(os.path.splitext(path)[0].replace("frame", "").replace("frame_", ""))
+        return int(os.path.splitext(path)[0].replace("frame_", "").replace("frame", ""))
     frame_names.sort(key=lambda p: path_to_int(p))
     num_frames = len(frame_names)
     if num_frames == 0:
